@@ -70,7 +70,18 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>4.0.3</version>
+				<configuration>
+					<user>Pati</user>
+					<password>Pati</password>
+					<schemas>
+						<schema>Shop</schema>
+					</schemas>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
