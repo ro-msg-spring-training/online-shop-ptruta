@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -22,6 +20,4 @@ public class Order {
     private String addressCity;
     private String addressCounty;
     private String addressStreetAddress;
-//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-//    private List<OrderDetail> orderDetailList = new ArrayList<>();
 }

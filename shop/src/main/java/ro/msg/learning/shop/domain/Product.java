@@ -18,8 +18,4 @@ public class Product {
     @ManyToOne
     private Supplier supplier;
     private String imageUrl;
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//    private List<Stock> stocks = new ArrayList<>();
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//    private List<OrderDetail> orderDetails = new ArrayList<>();
 }
