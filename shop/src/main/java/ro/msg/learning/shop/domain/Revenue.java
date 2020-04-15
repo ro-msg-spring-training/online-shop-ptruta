@@ -6,18 +6,12 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 @Entity
-@Table(name = "revenue")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
 public class Revenue {
     @Id
-    @GeneratedValue
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Location location;
     private LocalDate date;
     private BigDecimal sum;

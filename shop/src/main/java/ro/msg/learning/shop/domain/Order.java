@@ -7,26 +7,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
-@Table(name = "order")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Table(name="orders")
 public class Order {
     @Id
-    @GeneratedValue
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Location shippedForm;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Customer customer;
     private LocalDateTime localDateTime;
     private String addressCountry;
     private String addressCity;
     private String addressCounty;
     private String addressStreetAddress;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetailList = new ArrayList<>();
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+//    private List<OrderDetail> orderDetailList = new ArrayList<>();
 }

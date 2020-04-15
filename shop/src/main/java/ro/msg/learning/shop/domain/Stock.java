@@ -4,20 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Data
 @Entity
-@Table(name = "stock")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
 public class Stock {
     @Id
-    @GeneratedValue
     private Integer stock_id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Product product;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Location location;
     private Integer quantity;
 }

@@ -6,19 +6,13 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
-@Table(name = "product_category")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
 public class ProductCategory {
 @Id
-@GeneratedValue
 private Integer id;
 private String name;
 private String description;
-@OneToMany(mappedBy = "product_category", cascade = CascadeType.ALL)
-private List<Product> products = new ArrayList<>();
+//@OneToMany(mappedBy = "product_category", cascade = CascadeType.ALL)
+//private List<Product> products = new ArrayList<>();
 }
