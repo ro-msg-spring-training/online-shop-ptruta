@@ -5,7 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
+@Table(name = "stock", schema = "SHOP_SCHEMA")
 @Entity
+@EqualsAndHashCode
 public class Stock {
     @Id
     private Integer stock_id;
