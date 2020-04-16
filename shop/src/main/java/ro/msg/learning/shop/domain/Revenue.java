@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "revenue", schema = "SHOP_SCHEMA")
 @Entity
 @EqualsAndHashCode
+@Builder
 public class Revenue {
     @Id
     private Integer id;

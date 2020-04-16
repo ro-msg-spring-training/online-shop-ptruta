@@ -1,7 +1,10 @@
 package ro.msg.learning.shop.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ro.msg.learning.shop.domain.Stock;
+import ro.msg.learning.shop.domain.StockKey;
 
-public interface StockRepository extends JpaRepository<Stock, Integer> {
+@Repository
+public interface StockRepository extends JpaRepository<Stock, StockKey> {
 }

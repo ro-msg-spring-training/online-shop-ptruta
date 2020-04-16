@@ -8,12 +8,17 @@ import javax.persistence.*;
 @Table(name = "order_detail", schema = "SHOP_SCHEMA")
 @Entity
 @EqualsAndHashCode
+@Builder
 public class OrderDetail {
-    @Id
-    private Integer order_detail_id;
+    @EmbeddedId
+    private OrderDetailKey id;
     @ManyToOne
+    @MapsId("id")
+    @JoinColumn(name = "order_id")
     private Order order;
     @ManyToOne
+    @MapsId("id")
+    @JoinColumn(name = "product_id")
     private Product product;
     private Integer quantity;
 }

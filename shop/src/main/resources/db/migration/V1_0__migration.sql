@@ -49,12 +49,12 @@ create table if not exists SHOP_SCHEMA.product(
 );
 
 create table if not exists SHOP_SCHEMA.stock(
-    stock_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     quantity INTEGER,
     location_id INTEGER,
     product_id INTEGER,
     FOREIGN KEY (location_id) REFERENCES location,
-    FOREIGN KEY (product_id) REFERENCES product
+    FOREIGN KEY (product_id) REFERENCES product,
+    PRIMARY KEY(location_id, product_id)
 );
 
 create table if not exists SHOP_SCHEMA.orders(
@@ -71,10 +71,10 @@ create table if not exists SHOP_SCHEMA.orders(
 );
 
 create table if not exists SHOP_SCHEMA.order_detail(
-    order_detail_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     quantity INTEGER,
     order_id INTEGER,
     product_id INTEGER,
     FOREIGN KEY (order_id) REFERENCES orders,
-    FOREIGN KEY (product_id) REFERENCES product
+    FOREIGN KEY (product_id) REFERENCES product,
+    PRIMARY KEY(order_id, product_id)
 );

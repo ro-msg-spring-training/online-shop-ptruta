@@ -8,3 +8,5 @@ DROP TABLE SHOP_SCHEMA.product_category;
 DROP TABLE SHOP_SCHEMA.location;
 DROP TABLE SHOP_SCHEMA.customer;
 DROP TABLE flyway_schema_history;
+DROP TABLE "flyway_schema_history";
+DROP SCHEMA SHOP_SCHEMA;

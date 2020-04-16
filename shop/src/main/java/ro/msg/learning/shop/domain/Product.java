@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "product", schema = "SHOP_SCHEMA")
 @Entity
 @EqualsAndHashCode
+@Builder
 public class Product {
     @Id
     private Integer id;

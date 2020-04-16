@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode
 @Table(name="orders", schema = "SHOP_SCHEMA")
+@Builder
 public class Order {
     @Id
     private Integer id;
