@@ -12,6 +12,8 @@ import java.util.List;
 @EqualsAndHashCode
 @Table(name="orders", schema = "SHOP_SCHEMA")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
     @Id
     private Integer id;

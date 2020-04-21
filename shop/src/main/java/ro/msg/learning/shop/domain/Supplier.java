@@ -11,6 +11,8 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Supplier {
     @Id
     private Integer id;

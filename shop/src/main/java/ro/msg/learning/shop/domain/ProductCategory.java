@@ -11,6 +11,8 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductCategory {
 @Id
 private Integer id;

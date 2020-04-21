@@ -11,7 +11,6 @@ import ro.msg.learning.shop.domain.Product;
 @ToString(callSuper = true)
 @Builder
 public class OrderDetailDto extends BaseDto {
-    private Order order;
     private Product product;
     private Integer quantity;
 }

@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @Entity
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Revenue {
     @Id
     private Integer id;

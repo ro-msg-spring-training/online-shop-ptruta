@@ -9,6 +9,8 @@ import javax.persistence.*;
 @Entity
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Stock {
     @EmbeddedId
     private StockKey id;

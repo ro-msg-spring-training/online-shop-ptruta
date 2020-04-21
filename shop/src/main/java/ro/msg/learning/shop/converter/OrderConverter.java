@@ -10,14 +10,13 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
     @Override
     public Order convertDtoToModel(OrderDto dto) {
         Order order = Order.builder()
-                           .addressCity(dto.getCity())
-                           .addressCountry(dto.getCountry())
-                           .addressCounty(dto.getCounty())
-                           .addressStreetAddress(dto.getStreetAddress())
-                           .customer(dto.getCustomerId())
-                           .localDateTime(dto.getLocalDateTime())
-                           .shippedForm(dto.getShippedFormId())
-                           .build();
+                .addressCity(dto.getCity())
+                .addressCountry(dto.getCountry())
+                .addressCounty(dto.getCounty())
+                .addressStreetAddress(dto.getStreetAddress())
+                .customer(dto.getCustomerId())
+                .localDateTime(dto.getLocalDateTime())
+                .build();
         order.setId(dto.getId());
         return order;
     }
@@ -25,14 +24,13 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
     @Override
     public OrderDto convertModelToDto(Order order) {
         OrderDto orderDto = OrderDto.builder()
-                                    .city(order.getAddressCity())
-                                    .country(order.getAddressCountry())
-                                    .county(order.getAddressCounty())
-                                    .customerId(order.getCustomer())
-                                    .shippedFormId(order.getShippedForm())
-                                    .streetAddress(order.getAddressStreetAddress())
-                                    .localDateTime(order.getLocalDateTime())
-                                    .build();
+                .city(order.getAddressCity())
+                .country(order.getAddressCountry())
+                .county(order.getAddressCounty())
+                .customerId(order.getCustomer())
+                .streetAddress(order.getAddressStreetAddress())
+                .localDateTime(order.getLocalDateTime())
+                .build();
         orderDto.setId(order.getId());
         return orderDto;
     }
