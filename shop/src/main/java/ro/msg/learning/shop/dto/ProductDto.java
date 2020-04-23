@@ -2,15 +2,17 @@ package ro.msg.learning.shop.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
-public class ProductDto extends BaseDto{
+@EqualsAndHashCode
+public class ProductDto implements Serializable {
+    private Integer id;
     private String productName;
     private String productDescription;
     private BigDecimal productPrice;

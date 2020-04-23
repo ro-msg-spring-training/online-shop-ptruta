@@ -1,23 +1,27 @@
 package ro.msg.learning.shop.dto;
 
+import jdk.internal.net.http.common.Pair;
 import lombok.*;
-import ro.msg.learning.shop.domain.Customer;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
-public class OrderDto extends BaseDto {
-        private Customer customerId;
-        private LocalDateTime localDateTime;
-        private String country;
-        private String city;
-        private String county;
-        private String streetAddress;
-        private List<OrderDetailDto> orderDetailDtos;
+@EqualsAndHashCode
+public class OrderDto implements Serializable {
+    private Integer id;
+    private Integer customerId;
+    private LocalDateTime localDateTime;
+    private String country;
+    private String city;
+    private String county;
+    private String streetAddress;
+    private List<OrderDetailDto> orderDetails = new ArrayList<>();
 }

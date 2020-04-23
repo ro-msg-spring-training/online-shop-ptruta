@@ -29,7 +29,7 @@ create table if not exists SHOP_SCHEMA.supplier(
 
 create table if not exists SHOP_SCHEMA.revenue(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    date DATE,
+    `date` DATE,
     sum DECIMAL(19, 2),
     location_id INTEGER,
     FOREIGN KEY (location_id) REFERENCES location
@@ -57,7 +57,7 @@ create table if not exists SHOP_SCHEMA.stock(
     PRIMARY KEY(location_id, product_id)
 );
 
-create table if not exists SHOP_SCHEMA.orders(
+create table if not exists SHOP_SCHEMA.`order`(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     address_city VARCHAR(255),
     address_country VARCHAR(255),
@@ -74,7 +74,7 @@ create table if not exists SHOP_SCHEMA.order_detail(
     quantity INTEGER,
     order_id INTEGER,
     product_id INTEGER,
-    FOREIGN KEY (order_id) REFERENCES orders,
+    FOREIGN KEY (order_id) REFERENCES `order`,
     FOREIGN KEY (product_id) REFERENCES product,
     PRIMARY KEY(order_id, product_id)
 );

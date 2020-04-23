@@ -3,17 +3,18 @@ package ro.msg.learning.shop.dto;
 import lombok.*;
 import ro.msg.learning.shop.domain.Location;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
-public class RevenueDto extends BaseDto{
-    private Location revenueLocation;
+@EqualsAndHashCode
+public class RevenueDto implements Serializable {
+    private Integer id;
     private LocalDate localDate;
     private BigDecimal sumOfRevenue;
 }

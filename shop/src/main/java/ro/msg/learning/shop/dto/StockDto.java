@@ -4,14 +4,16 @@ import lombok.*;
 import ro.msg.learning.shop.domain.Location;
 import ro.msg.learning.shop.domain.Product;
 
-@EqualsAndHashCode(callSuper = true)
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
-public class StockDto extends BaseDto {
-    private Product product;
-    private Location location;
+@EqualsAndHashCode
+public class StockDto implements Serializable {
+    private Integer productId;
+    private Integer locationId;
     private Integer quantity;
 }

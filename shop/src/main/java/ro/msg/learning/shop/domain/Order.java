@@ -4,28 +4,33 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
-@EqualsAndHashCode
-@Table(name="orders", schema = "SHOP_SCHEMA")
+@Table(name = "order", schema = "SHOP_SCHEMA")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @ManyToOne
     private Location shippedForm;
+
     @ManyToOne
     private Customer customer;
+
     private LocalDateTime localDateTime;
+
     private String addressCountry;
+
     private String addressCity;
+
     private String addressCounty;
+
     private String addressStreetAddress;
-//    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
-//    private List<OrderDetail> orderDetailList = new ArrayList<>();
 }

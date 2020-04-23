@@ -2,50 +2,46 @@ package ro.msg.learning.shop.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.converter.ProductConverter;
 import ro.msg.learning.shop.domain.Product;
-import ro.msg.learning.shop.dto.ProductDto;
 import ro.msg.learning.shop.repository.ProductCategoryRepository;
 import ro.msg.learning.shop.repository.ProductRepository;
 import ro.msg.learning.shop.repository.SupplierRepository;
-import ro.msg.learning.shop.service.interfaces.IProductService;
+import ro.msg.learning.shop.service.exceptions.ProductNoIdFoundException;
+import ro.msg.learning.shop.service.exceptions.SupplierIdNotFoundException;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements IProductService {
+public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final SupplierRepository supplierRepository;
-    private final ProductConverter productConverter;
 
 
-    @Override
-    public ProductDto createProduct(ProductDto productDto) {
-        Product product = productConverter.convertDtoToModel(productDto);
-        product.setProductCategory(productCategoryRepository.findById(productDto.getProductCategoryId())
-                .orElseThrow(() -> new RuntimeException("No category id set on dto!")));
-        product.setSupplier(supplierRepository.findById(productDto.getProductSupplierId())
-                .orElseThrow(() -> new RuntimeException("No supplier id set on dto!")));
-        Product savedProduct = productRepository.save(product);
-        return productConverter.convertModelToDto(savedProduct);
+    public Product createProduct(Product product) throws ProductNoIdFoundException, SupplierIdNotFoundException {
+        productCategoryRepository.findById(product.getProductCategory().getId())
+                .orElseThrow(() -> new ProductNoIdFoundException("No product id found" + product.getProductCategory().getId()));
+        supplierRepository.findById(product.getSupplier().getId())
+                .orElseThrow(() -> new SupplierIdNotFoundException("No supplier id found" + product.getSupplier().getId()));
+        product.setId(product.getId());
+        return productRepository.save(product);
     }
 
-    @Override
-    public ProductDto getProduct(final Integer id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No product with id" + id));
-        return productConverter.convertModelToDto(product);
+
+    public Product getProduct(final Integer id) throws ProductNoIdFoundException {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNoIdFoundException("No product with id" + id));
     }
 
-    @Override
-    public ProductDto updateProduct(final Integer id, ProductDto productDto) {
-        Product product = productConverter.convertDtoToModel(productDto);
+
+    @Transactional
+    public Product updateProduct(final Integer id, Product product) throws ProductNoIdFoundException {
         Product productFound = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No product found"));
+                .orElseThrow(() -> new ProductNoIdFoundException("No product found with this id" + id));
         productFound.setProductCategory(product.getProductCategory());
         productFound.setSupplier(product.getSupplier());
         productFound.setId(id);
@@ -54,19 +50,19 @@ public class ProductService implements IProductService {
         productFound.setName(product.getName());
         productFound.setPrice(product.getPrice());
         productFound.setWeight(product.getWeight());
-        Product savedProduct = productRepository.save(productFound);
-        return productConverter.convertModelToDto(savedProduct);
+        return productRepository.save(productFound);
     }
 
-    @Override
-    public void deleteProduct(final Integer id) {
+
+    public Product deleteProduct(final Integer id) throws ProductNoIdFoundException {
+        Product productFound = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNoIdFoundException("No product found with this id" + id));
         productRepository.deleteById(id);
+        return productFound;
     }
 
-    @Override
-    public List<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream()
-                .map(productConverter::convertModelToDto)
-                .collect(Collectors.toList());
+
+    public List<Product> getAllProducts() {
+        return new ArrayList<>(productRepository.findAll());
     }
 }

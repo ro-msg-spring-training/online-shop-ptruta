@@ -1,8 +1,6 @@
 package ro.msg.learning.shop.dto;
 
 import lombok.*;
-import ro.msg.learning.shop.domain.Order;
-import ro.msg.learning.shop.domain.Product;
 
 import java.io.Serializable;
 
@@ -12,7 +10,7 @@ import java.io.Serializable;
 @Setter
 @Builder
 @EqualsAndHashCode
-public class OrderDetailDto implements Serializable {
+public class ProductQuantityDto implements Serializable {
     private Integer productId;
     private Integer quantity;
 }

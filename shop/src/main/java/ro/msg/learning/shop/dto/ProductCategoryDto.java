@@ -2,13 +2,16 @@ package ro.msg.learning.shop.dto;
 
 import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
-public class ProductCategoryDto extends BaseDto {
+@EqualsAndHashCode
+public class ProductCategoryDto implements Serializable {
+    private Integer id;
     private String productCategoryName;
     private String productDescription;
 }

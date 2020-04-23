@@ -10,19 +10,16 @@ public class SupplierConverter extends BaseConverter<Supplier, SupplierDto> {
 
     @Override
     public Supplier convertDtoToModel(SupplierDto dto) {
-        Supplier supplier = Supplier.builder()
+        return Supplier.builder()
                 .name(dto.getSupplierName())
                 .build();
-        supplier.setId(dto.getId());
-        return supplier;
     }
 
     @Override
     public SupplierDto convertModelToDto(Supplier supplier) {
-        SupplierDto supplierDto = SupplierDto.builder()
+        return SupplierDto.builder()
+                .id(supplier.getId())
                 .supplierName(supplier.getName())
                 .build();
-        supplierDto.setId(supplier.getId());
-        return supplierDto;
     }
 }

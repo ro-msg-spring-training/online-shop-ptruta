@@ -9,21 +9,18 @@ public class ProductCategoryConverter extends BaseConverter<ProductCategory, Pro
 
     @Override
     public ProductCategory convertDtoToModel(ProductCategoryDto dto) {
-        ProductCategory productCategory = ProductCategory.builder()
+        return ProductCategory.builder()
                 .description(dto.getProductDescription())
                 .name(dto.getProductCategoryName())
                 .build();
-        productCategory.setId(dto.getId());
-        return productCategory;
     }
 
     @Override
     public ProductCategoryDto convertModelToDto(ProductCategory productCategory) {
-        ProductCategoryDto productCategoryDto = ProductCategoryDto.builder()
+        return ProductCategoryDto.builder()
+                .id(productCategory.getId())
                 .productDescription(productCategory.getDescription())
                 .productCategoryName(productCategory.getName())
                 .build();
-        productCategoryDto.setId(productCategory.getId());
-        return productCategoryDto;
     }
 }

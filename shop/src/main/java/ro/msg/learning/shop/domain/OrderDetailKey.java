@@ -9,11 +9,14 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Embeddable
+@EqualsAndHashCode
 public class OrderDetailKey implements Serializable {
-    @Column(name="order_id")
+    @Column(name = "order_id")
     private Integer orderId;
-    @Column(name="product_id")
+
+    @Column(name = "product_id")
     private Integer productId;
 }

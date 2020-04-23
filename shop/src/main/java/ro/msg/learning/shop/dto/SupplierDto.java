@@ -2,12 +2,15 @@ package ro.msg.learning.shop.dto;
 
 import lombok.*;
 
-@EqualsAndHashCode(callSuper = true)
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@ToString(callSuper = true)
+@Getter
+@Setter
 @Builder
-public class SupplierDto extends BaseDto{
+@EqualsAndHashCode
+public class SupplierDto implements Serializable {
+    private Integer id;
     private String supplierName;
 }
