@@ -11,7 +11,10 @@ import java.io.Serializable;
 @Builder
 @EqualsAndHashCode
 public class ProductCategoryDto implements Serializable {
+
     private Integer id;
+
     private String productCategoryName;
+
     private String productDescription;
 }

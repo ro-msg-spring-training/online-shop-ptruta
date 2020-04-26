@@ -1,14 +1,17 @@
 package ro.msg.learning.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "order", schema = "SHOP_SCHEMA")
+@Table(name = "orderr", schema = "SHOP_SCHEMA")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +27,8 @@ public class Order {
     @ManyToOne
     private Customer customer;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime localDateTime;
 
     private String addressCountry;

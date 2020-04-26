@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Table(name = "order_detail", schema = "SHOP_SCHEMA")
+@Table(name = "orderr_detail", schema = "SHOP_SCHEMA")
 @Entity
 @Builder
 @AllArgsConstructor
@@ -18,7 +18,7 @@ public class OrderDetail {
 
     @ManyToOne
     @MapsId("id")
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orderr_id")
     private Order order;
 
     @ManyToOne

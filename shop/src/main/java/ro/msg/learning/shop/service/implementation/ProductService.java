@@ -32,9 +32,9 @@ public class ProductService {
     }
 
 
-    public Product getProduct(final Integer id) throws ProductNoIdFoundException {
+    public Product getProduct(final Integer id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNoIdFoundException("No product with id" + id));
+                .orElse(null);
     }
 
 
@@ -54,6 +54,7 @@ public class ProductService {
     }
 
 
+    @Transactional
     public Product deleteProduct(final Integer id) throws ProductNoIdFoundException {
         Product productFound = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNoIdFoundException("No product found with this id" + id));

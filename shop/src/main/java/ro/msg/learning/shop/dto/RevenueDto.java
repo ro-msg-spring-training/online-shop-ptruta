@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class RevenueDto implements Serializable {
     private Integer id;
+
     private LocalDate localDate;
+
     private BigDecimal sumOfRevenue;
 }

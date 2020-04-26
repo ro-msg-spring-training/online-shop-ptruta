@@ -13,7 +13,10 @@ import java.io.Serializable;
 @Builder
 @EqualsAndHashCode
 public class StockDto implements Serializable {
+
     private Integer productId;
+
     private Integer locationId;
+
     private Integer quantity;
 }

@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Builder
 @EqualsAndHashCode
 public class SupplierDto implements Serializable {
+
     private Integer id;
+
     private String supplierName;
 }

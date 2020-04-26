@@ -13,6 +13,10 @@ import java.io.Serializable;
 @Builder
 @EqualsAndHashCode
 public class OrderDetailDto implements Serializable {
-    private Integer productId;
+
+    private LocationDto location;
+
+    private ProductDto product;
+
     private Integer quantity;
 }

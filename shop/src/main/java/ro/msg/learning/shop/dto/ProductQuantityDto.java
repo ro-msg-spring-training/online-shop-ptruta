@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Builder
 @EqualsAndHashCode
 public class ProductQuantityDto implements Serializable {
+
     private Integer productId;
+
     private Integer quantity;
 }

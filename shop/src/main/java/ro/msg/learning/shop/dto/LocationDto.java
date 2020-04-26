@@ -11,10 +11,16 @@ import java.io.Serializable;
 @Builder
 @EqualsAndHashCode
 public class LocationDto implements Serializable {
+
     private Integer id;
+
     private String name;
+
     private String country;
+
     private String city;
+
     private String county;
+
     private String streetAddress;
 }

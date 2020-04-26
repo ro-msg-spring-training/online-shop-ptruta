@@ -7,12 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.msg.learning.shop.repository.ProductRepository;
 import ro.msg.learning.shop.repository.StockRepository;
+import ro.msg.learning.shop.service.implementation.LocationService;
+import ro.msg.learning.shop.service.implementation.StockService;
 
 @Configuration
 @RequiredArgsConstructor
 public class ChosenStrategy {
-    private final StockRepository stockRepository;
-    private final ProductRepository productRepository;
+    private final StockService stockService;
+    private final LocationService locationService;
 
     @Value("${choose_strategy}")
     private String chooseStrategy;
@@ -20,9 +22,9 @@ public class ChosenStrategy {
     @Bean
     public IWhichStrategy getStrategy() {
         if (chooseStrategy.equals("MostAbundant")) {
-            return new MostAbundantStrategy(stockRepository, productRepository);
+            return new MostAbundantStrategy(stockService, locationService);
         } else if (chooseStrategy.equals("Single"))
-            return new SingleLocationStrategy(stockRepository);
+            return new SingleLocationStrategy(stockService, locationService);
 
         return null;
     }

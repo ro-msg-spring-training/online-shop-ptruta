@@ -1,61 +1,44 @@
 package ro.msg.learning.shop.service.strategies;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.stereotype.Service;
-import ro.msg.learning.shop.converter.LocationConverter;
-import ro.msg.learning.shop.domain.Location;
-import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.domain.Stock;
-import ro.msg.learning.shop.dto.LocationDto;
-import ro.msg.learning.shop.dto.ProductQuantityDto;
-import ro.msg.learning.shop.repository.LocationRepository;
-import ro.msg.learning.shop.repository.ProductRepository;
-import ro.msg.learning.shop.repository.StockRepository;
+import ro.msg.learning.shop.service.exceptions.LocationIdNotFoundException;
+import ro.msg.learning.shop.service.implementation.LocationService;
+import ro.msg.learning.shop.service.implementation.StockService;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class MostAbundantStrategy implements IWhichStrategy{
-    private final StockRepository stockRepository;
-    private final ProductRepository productRepository;
+public class MostAbundantStrategy implements IWhichStrategy {
+    private final StockService stockService;
+    private final LocationService locationService;
 
     @Override
     @Transactional
-    public List<Stock> getProductLocation(final Integer productId, final Integer quantity) {
-        List<Location> locations = new ArrayList<>();
-        List<Stock> stocks = stockRepository.findAll();
-        List<Product> products = productRepository.findAll();
+    public List<Stock> getProductLocation(Map<Integer, Integer> stocks) throws LocationIdNotFoundException {
         List<Stock> finalStocks = new ArrayList<>();
 
-        for (Stock stock : stocks) {
-                if (stock.getQuantity() >= quantity
-                        && stock.getProduct().getId().equals(productId)) {
-                    locations.add(stock.getLocation());
-                }
-            }
-
-        for (Stock stock : stocks) {
-            for (Product prod : products) {
-                if (stock.getProduct().equals(prod)) {
-                    Integer max = stock.getQuantity();
-                    for (Location location : locations) {
-                        if (stock.getLocation().equals(location)) {
-                            if (stock.getQuantity() > max) {
-                                max = stock.getQuantity();
-                            }
-                        }
-                    }
-                    if (stock.getQuantity().equals(max)){
-                        finalStocks.add(stock);
-                    }
-                }
+        for (Map.Entry stock : stocks.entrySet()) {
+            Stock productStock = stockService
+                    .getStockByProductId((Integer) stock.getKey())
+                    .stream()
+                    .filter(s -> s.getQuantity() >= (Integer) stock.getValue()
+                            && s.getProduct().getId().equals((Integer) stock.getKey()))
+                    .max(Comparator.comparing(Stock::getQuantity)).orElse(null);
+            if (productStock != null && productStock.getQuantity() > (Integer) stock.getValue()) {
+                finalStocks.add(productStock);
             }
         }
-        return finalStocks;
+
+        if (finalStocks.size() > 0)
+            return finalStocks;
+
+        throw new LocationIdNotFoundException("Unable to find a suitable set of locations");
     }
 }

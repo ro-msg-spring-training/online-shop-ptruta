@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Embeddable
 @EqualsAndHashCode
 public class OrderDetailKey implements Serializable {
-    @Column(name = "order_id")
+    @Column(name = "orderr_id")
     private Integer orderId;
 
     @Column(name = "product_id")

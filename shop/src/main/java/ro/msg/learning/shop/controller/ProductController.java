@@ -12,6 +12,7 @@ import ro.msg.learning.shop.service.exceptions.ProductNoIdFoundException;
 import ro.msg.learning.shop.service.exceptions.SupplierIdNotFoundException;
 import ro.msg.learning.shop.service.implementation.ProductService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -23,6 +24,7 @@ public class ProductController {
     private final String headerValue = "ProductController";
 
     @GetMapping(path = "/products", produces = "application/json")
+    @Transactional
     public ResponseEntity<List<ProductDto>> getAllProducts() {
 
         List<Product> allProducts = productService.getAllProducts();
@@ -34,6 +36,7 @@ public class ProductController {
 
 
     @GetMapping(value = "/products/{id}", produces = "application/json")
+    @Transactional
     public ResponseEntity<ProductDto> getProduct(@PathVariable("id") final Integer id)
             throws ProductNoIdFoundException {
 
@@ -45,6 +48,7 @@ public class ProductController {
     }
 
     @PostMapping(value = "/products", produces = "application/json")
+    @Transactional
     public ResponseEntity<ProductDto> createProduct(@RequestBody final ProductDto product)
             throws ProductNoIdFoundException, SupplierIdNotFoundException {
 
@@ -58,8 +62,10 @@ public class ProductController {
     }
 
     @PutMapping(value = "/products/{id}", produces = "application/json")
+    @Transactional
     public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") final Integer id,
-                                                    @RequestBody final ProductDto productDto) throws ProductNoIdFoundException {
+                                                    @RequestBody final ProductDto productDto)
+            throws ProductNoIdFoundException {
 
         Product productConverted = productConverter.convertDtoToModel(productDto);
 
@@ -72,6 +78,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/products/{id}", produces = "application/json")
+    @Transactional
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable("id") final Integer id) throws ProductNoIdFoundException {
 
         Product productDeleted = productService.deleteProduct(id);
