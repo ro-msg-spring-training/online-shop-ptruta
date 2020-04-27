@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class OrderConverter extends BaseConverter<Order, OrderDto> {
     private final CustomerService customerService;
     private final OrderDetailRepository orderDetailRepository;
+    private final LocationConverter locationConverter;
 
     @Override
     public Order convertDtoToModel(OrderDto dto) {
@@ -64,6 +65,7 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
                 .streetAddress(order.getAddressStreetAddress())
                 .localDateTime(order.getLocalDateTime())
                 .orderDetails(orderDetailsList)
+                .shippedFrom(locationConverter.convertModelToDto(order.getShippedForm()))
                 .build();
     }
 }

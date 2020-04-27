@@ -24,14 +24,14 @@ public class MostAbundantStrategy implements IWhichStrategy {
     public List<Stock> getProductLocation(Map<Integer, Integer> stocks) throws LocationIdNotFoundException {
         List<Stock> finalStocks = new ArrayList<>();
 
-        for (Map.Entry stock : stocks.entrySet()) {
+        for (Map.Entry<Integer,Integer> stock : stocks.entrySet()) {
             Stock productStock = stockService
-                    .getStockByProductId((Integer) stock.getKey())
+                    .getStockByProductId( stock.getKey())
                     .stream()
-                    .filter(s -> s.getQuantity() >= (Integer) stock.getValue()
-                            && s.getProduct().getId().equals((Integer) stock.getKey()))
+                    .filter(s -> s.getQuantity() >= stock.getValue()
+                            && s.getProduct().getId().equals( stock.getKey()))
                     .max(Comparator.comparing(Stock::getQuantity)).orElse(null);
-            if (productStock != null && productStock.getQuantity() > (Integer) stock.getValue()) {
+            if (productStock != null && productStock.getQuantity() > stock.getValue()) {
                 finalStocks.add(productStock);
             }
         }

@@ -38,7 +38,7 @@ public class OrderController {
     @PostMapping(value = "/orders",  produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) throws StockLocationProductIdNotFoundException, ProductNoIdFoundException, LocationIdNotFoundException, OrderNotFoundIdException, UnavailableStockException {
+    public ResponseEntity<List<OrderDto>> createOrder(@RequestBody OrderDto orderDto) throws StockLocationProductIdNotFoundException, ProductNoIdFoundException, LocationIdNotFoundException, OrderNotFoundIdException, UnavailableStockException {
         Map<Integer, Integer> stocks = new HashMap<>();
 
         List<ProductQuantityDto> orderDetailDtos = orderDto.getOrderDetails();
@@ -54,12 +54,10 @@ public class OrderController {
 
         Order order = orderConverter.convertDtoToModel(orderDto);
 
-        order = orderService.createOrder(stocks, order);
+        List<Order> orders = orderService.createOrder(stocks, order);
 
-        OrderDto orderConverted = orderConverter.convertModelToDto(order);
+        List<OrderDto> ordersConverted = orderConverter.convertModelsToDtos(orders);
 
-        orderConverted.setId(orderDto.getId());
-
-        return ResponseEntity.accepted().body(orderConverted);
+        return ResponseEntity.accepted().body(ordersConverted);
     }
 }

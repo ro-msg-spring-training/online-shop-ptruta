@@ -7,7 +7,6 @@ import ro.msg.learning.shop.repository.OrderDetailRepository;
 import ro.msg.learning.shop.repository.OrderRepository;
 import ro.msg.learning.shop.service.exceptions.LocationIdNotFoundException;
 import ro.msg.learning.shop.service.exceptions.StockLocationProductIdNotFoundException;
-import ro.msg.learning.shop.service.exceptions.UnavailableStockException;
 import ro.msg.learning.shop.service.strategies.ChosenStrategy;
 
 import javax.transaction.Transactional;
@@ -27,18 +26,22 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public Order createOrder(Map<Integer, Integer> stocks, Order order) throws StockLocationProductIdNotFoundException,
+    public List<Order> createOrder(Map<Integer, Integer> stocks, Order order) throws StockLocationProductIdNotFoundException,
             LocationIdNotFoundException {
         List<Stock> stocksList = strategy.getStrategy().getProductLocation(stocks);
         List<OrderDetail> orderDetails = new ArrayList<>();
         OrderDetail orderDetail;
-
-        order.setCustomer(customerService.getCustomer(order.getCustomer().getId()));
-        order.setShippedForm(stocksList.get(0).getLocation());
-
-        Order savedOrder = orderRepository.save(order);
+        List<Order> orders = new ArrayList<>();
 
         for (Stock stock : stocksList) {
+
+            order.setCustomer(customerService.getCustomer(order.getCustomer().getId()));
+            order.setShippedForm(stock.getLocation());
+
+            Order savedOrder = orderRepository.save(order);
+
+            orders.add(savedOrder);
+
             Stock stockWithUpdatedQuantity = updateStockQuantity(stock, stocks);
 
             Product product = Objects.requireNonNull(stockWithUpdatedQuantity).getProduct();
@@ -58,8 +61,8 @@ public class OrderService {
 
         orderDetailRepository.saveAll(orderDetails);
 
-        return savedOrder;
-}
+        return orders;
+    }
 
     private Stock updateStockQuantity(Stock stock, Map<Integer, Integer> stocks)
             throws StockLocationProductIdNotFoundException {

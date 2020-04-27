@@ -21,6 +21,8 @@ public class OrderDto implements Serializable {
 
     private Integer customerId;
 
+    private LocationDto shippedFrom;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime localDateTime;
