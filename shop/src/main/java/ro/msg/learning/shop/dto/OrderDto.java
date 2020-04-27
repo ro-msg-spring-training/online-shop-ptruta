@@ -33,6 +33,5 @@ public class OrderDto implements Serializable {
 
     private String streetAddress;
 
-    //private Map<Integer, Integer> orderDetails;
     private List<ProductQuantityDto> orderDetails;
 }
