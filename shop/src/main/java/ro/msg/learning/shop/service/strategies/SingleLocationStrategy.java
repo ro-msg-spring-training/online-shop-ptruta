@@ -36,7 +36,7 @@ public class SingleLocationStrategy implements IWhichStrategy {
                         .findFirst()
                         .orElse(null);
 
-                if (newStock != null && newStock.getQuantity() > (Integer) stock.getValue() &&
+                if (newStock != null && newStock.getQuantity() > stock.getValue() &&
                         !productsStocks.contains(newStock)) {
                     productsStocks.add(newStock);
                 }

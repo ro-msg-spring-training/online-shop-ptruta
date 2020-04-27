@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.domain.*;
 import ro.msg.learning.shop.repository.OrderDetailRepository;
@@ -24,6 +25,8 @@ public class OrderService {
     private final StockService stockService;
     private final CustomerService customerService;
     private final OrderRepository orderRepository;
+    @Value("${choose_strategy}")
+    private String chooseStrategy;
 
     @Transactional
     public List<Order> createOrder(Map<Integer, Integer> stocks, Order order) throws StockLocationProductIdNotFoundException,
@@ -32,22 +35,29 @@ public class OrderService {
         List<OrderDetail> orderDetails = new ArrayList<>();
         OrderDetail orderDetail;
         List<Order> orders = new ArrayList<>();
+        Order savedOrder = null;
+
+        if (chooseStrategy.equals("Single")){
+            order.setCustomer(customerService.getCustomer(1));
+            order.setShippedForm(stocksList.get(0).getLocation());
+            savedOrder = orderRepository.save(order);
+            orders.add(savedOrder);
+        }
 
         for (Stock stock : stocksList) {
-
-            order.setCustomer(customerService.getCustomer(order.getCustomer().getId()));
-            order.setShippedForm(stock.getLocation());
-
-            Order savedOrder = orderRepository.save(order);
-
-            orders.add(savedOrder);
-
             Stock stockWithUpdatedQuantity = updateStockQuantity(stock, stocks);
+
+            if(chooseStrategy.equals("MostAbundant")) {
+                order.setCustomer(customerService.getCustomer(1));
+                order.setShippedForm(stock.getLocation());
+                savedOrder = orderRepository.save(order);
+                orders.add(savedOrder);
+            }
 
             Product product = Objects.requireNonNull(stockWithUpdatedQuantity).getProduct();
             Integer quantity = stocks.get(stock.getProduct().getId());
             OrderDetailKey orderDetailKey = OrderDetailKey
-                    .builder().orderId(savedOrder.getId())
+                    .builder().orderId(Objects.requireNonNull(savedOrder).getId())
                     .productId(product.getId()).build();
 
             orderDetail = OrderDetail.builder()
