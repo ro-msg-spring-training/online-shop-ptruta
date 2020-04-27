@@ -1,14 +1,11 @@
 package ro.msg.learning.shop.service.implementation;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.domain.*;
 import ro.msg.learning.shop.repository.OrderDetailRepository;
 import ro.msg.learning.shop.repository.OrderRepository;
 import ro.msg.learning.shop.service.exceptions.LocationIdNotFoundException;
-import ro.msg.learning.shop.service.exceptions.ProductNoIdFoundException;
 import ro.msg.learning.shop.service.exceptions.StockLocationProductIdNotFoundException;
 import ro.msg.learning.shop.service.exceptions.UnavailableStockException;
 import ro.msg.learning.shop.service.strategies.ChosenStrategy;
@@ -17,12 +14,11 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderDetailRepository orderDetailRepository;
     private final ChosenStrategy strategy;
@@ -32,58 +28,38 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(Map<Integer, Integer> stocks, Order order) throws StockLocationProductIdNotFoundException,
-            LocationIdNotFoundException, UnavailableStockException {
+            LocationIdNotFoundException {
         List<Stock> stocksList = strategy.getStrategy().getProductLocation(stocks);
         List<OrderDetail> orderDetails = new ArrayList<>();
-        Stock newSock;
         OrderDetail orderDetail;
 
-        Order orderNew = Order.builder()
-                .localDateTime(order.getLocalDateTime())
-                .shippedForm(stocksList.get(0).getLocation())
-                .customer(customerService.getCustomer(order.getCustomer().getId()))
-                .addressCountry(order.getAddressCountry())
-                .addressCity(order.getAddressCity())
-                .addressCounty(order.getAddressCounty())
-                .addressStreetAddress(order.getAddressStreetAddress())
-                .build();
+        order.setCustomer(customerService.getCustomer(order.getCustomer().getId()));
+        order.setShippedForm(stocksList.get(0).getLocation());
 
-        Order savedOrder = orderRepository.save(orderNew);
-        LOGGER.info("Total number of orders: {}", orderRepository.findAll().size());
+        Order savedOrder = orderRepository.save(order);
 
         for (Stock stock : stocksList) {
             Stock stockWithUpdatedQuantity = updateStockQuantity(stock, stocks);
 
-            if (stockWithUpdatedQuantity == null) {
-                orderRepository.deleteById(savedOrder.getId());
-                throw new UnavailableStockException("Product " + stock.getProduct() +
-                        " doesn't have in stock " + stock.getQuantity() + " items");
-            } else { // Add the valid products in a list
-                // Create the id for order detail
-                Product product = stockWithUpdatedQuantity.getProduct();
-                Integer quantity = stockWithUpdatedQuantity.getQuantity();
-                OrderDetailKey orderDetailKey = OrderDetailKey
-                        .builder().orderId(savedOrder.getId())
-                        .productId(product.getId()).build();
+            Product product = Objects.requireNonNull(stockWithUpdatedQuantity).getProduct();
+            Integer quantity = stocks.get(stock.getProduct().getId());
+            OrderDetailKey orderDetailKey = OrderDetailKey
+                    .builder().orderId(savedOrder.getId())
+                    .productId(product.getId()).build();
 
-                // Create the order detail
-                orderDetail = OrderDetail.builder()
-                        .id(orderDetailKey)
-                        .order(savedOrder)
-                        .product(product)
-                        .quantity(quantity).build();
+            orderDetail = OrderDetail.builder()
+                    .id(orderDetailKey)
+                    .order(savedOrder)
+                    .product(product)
+                    .quantity(quantity).build();
 
-                // Add it to the list
-                orderDetails.add(orderDetail);
-            }
-        }
-        // If the order has all products in stock save it
-        for (OrderDetail o : orderDetails) {
-            orderDetailRepository.save(o);
+            orderDetails.add(orderDetail);
         }
 
-        return orderNew;
-    }
+        orderDetailRepository.saveAll(orderDetails);
+
+        return savedOrder;
+}
 
     private Stock updateStockQuantity(Stock stock, Map<Integer, Integer> stocks)
             throws StockLocationProductIdNotFoundException {

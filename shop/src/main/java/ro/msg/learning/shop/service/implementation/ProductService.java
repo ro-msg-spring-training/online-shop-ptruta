@@ -27,7 +27,6 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNoIdFoundException("No product id found" + product.getProductCategory().getId()));
         supplierRepository.findById(product.getSupplier().getId())
                 .orElseThrow(() -> new SupplierIdNotFoundException("No supplier id found" + product.getSupplier().getId()));
-        product.setId(product.getId());
         return productRepository.save(product);
     }
 

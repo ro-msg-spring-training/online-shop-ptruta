@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -32,5 +33,6 @@ public class OrderDto implements Serializable {
 
     private String streetAddress;
 
-    private Map<Integer, Integer> orderDetails;
+    //private Map<Integer, Integer> orderDetails;
+    private List<ProductQuantityDto> orderDetails;
 }

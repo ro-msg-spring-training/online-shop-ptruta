@@ -7,9 +7,12 @@ import ro.msg.learning.shop.domain.Order;
 import ro.msg.learning.shop.domain.OrderDetail;
 import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.dto.OrderDto;
+import ro.msg.learning.shop.dto.ProductQuantityDto;
 import ro.msg.learning.shop.repository.OrderDetailRepository;
 import ro.msg.learning.shop.service.implementation.CustomerService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,8 +45,16 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
                 .orElse(null);
         Map<Integer, Integer> orderDetails = orderDetailRepository.findAll()
                 .stream()
-                .filter(o -> o.getOrder().equals(order))
-                .collect(Collectors.toMap(orderDetail -> orderDetail.getProduct().getId(), OrderDetail::getQuantity));
+                .filter(o -> o.getOrder().getId().equals(order.getId()))
+                .collect(Collectors.toMap(orderDetail -> orderDetail.getProduct().getId(),
+                        OrderDetail::getQuantity));
+        List<ProductQuantityDto> orderDetailsList = new ArrayList<>();
+        for (Map.Entry<Integer,Integer> orderDetail : orderDetails.entrySet()){
+            ProductQuantityDto productQuantityDto = new ProductQuantityDto();
+            productQuantityDto.setProductId(orderDetail.getKey());
+            productQuantityDto.setQuantity(orderDetail.getValue());
+            orderDetailsList.add(productQuantityDto);
+        }
         return OrderDto.builder()
                 .id(order.getId())
                 .city(order.getAddressCity())
@@ -52,7 +63,7 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
                 .customerId(customerId)
                 .streetAddress(order.getAddressStreetAddress())
                 .localDateTime(order.getLocalDateTime())
-                .orderDetails(orderDetails)
+                .orderDetails(orderDetailsList)
                 .build();
     }
 }
