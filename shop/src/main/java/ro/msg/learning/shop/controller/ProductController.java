@@ -1,15 +1,11 @@
 package ro.msg.learning.shop.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.var;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.converter.ProductConverter;
 import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.dto.ProductDto;
-import ro.msg.learning.shop.service.exceptions.ProductNoIdFoundException;
-import ro.msg.learning.shop.service.exceptions.SupplierIdNotFoundException;
 import ro.msg.learning.shop.service.implementation.ProductService;
 
 import javax.transaction.Transactional;
@@ -35,7 +31,7 @@ public class ProductController {
 
     @GetMapping(value = "/products/{id}", produces = "application/json")
     @Transactional
-    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") final Integer id){
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") final Integer id) {
 
         Product product = productService.getProduct(id);
 
@@ -46,8 +42,7 @@ public class ProductController {
 
     @PostMapping(value = "/products", produces = "application/json")
     @Transactional
-    public ResponseEntity<ProductDto> createProduct(@RequestBody final ProductDto product)
-            throws ProductNoIdFoundException, SupplierIdNotFoundException {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody final ProductDto product) {
 
         Product productConverted = productConverter.convertDtoToModel(product);
 
@@ -61,8 +56,7 @@ public class ProductController {
     @PutMapping(value = "/products/{id}", produces = "application/json")
     @Transactional
     public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") final Integer id,
-                                                    @RequestBody final ProductDto productDto)
-            throws ProductNoIdFoundException {
+                                                    @RequestBody final ProductDto productDto) {
 
         Product productConverted = productConverter.convertDtoToModel(productDto);
 
@@ -76,7 +70,7 @@ public class ProductController {
 
     @DeleteMapping(value = "/products/{id}", produces = "application/json")
     @Transactional
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable("id") final Integer id) throws ProductNoIdFoundException {
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable("id") final Integer id) {
 
         Product productDeleted = productService.deleteProduct(id);
 

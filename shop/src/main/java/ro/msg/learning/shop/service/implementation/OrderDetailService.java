@@ -13,6 +13,7 @@ import ro.msg.learning.shop.service.exceptions.OrderNotFoundIdException;
 import ro.msg.learning.shop.service.exceptions.ProductNoIdFoundException;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +25,13 @@ public class OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
 
     @Transactional
-    public OrderDetail createDetail(OrderDetail orderDetail, Order order) throws ProductNoIdFoundException {
+    public OrderDetail createDetail(OrderDetail orderDetail, Order order) {
         productRepository.findById(orderDetail.getProduct().getId())
                 .orElseThrow(() -> new ProductNoIdFoundException("No product id found" + orderDetail.getProduct().getId()));
         return orderDetailRepository.save(orderDetail);
+    }
+
+    public List<OrderDetail> getOrderDetails(){
+        return orderDetailRepository.findAll();
     }
 }

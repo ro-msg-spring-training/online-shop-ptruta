@@ -7,6 +7,7 @@ import ro.msg.learning.shop.domain.Stock;
 import ro.msg.learning.shop.service.exceptions.LocationIdNotFoundException;
 import ro.msg.learning.shop.service.implementation.LocationService;
 import ro.msg.learning.shop.service.implementation.StockService;
+import ro.msg.learning.shop.service.strategies.configuration.IWhichStrategy;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -21,27 +22,27 @@ public class SingleLocationStrategy implements IWhichStrategy {
 
     @Override
     @Transactional
-    public List<Stock> getProductLocation(Map<Integer, Integer> stocks) throws LocationIdNotFoundException {
+    public List<Stock> getProductLocation(Map<Integer, Integer> productQuantityListInput){
         List<Location> locations = locationService.getLocations();
 
         for (Location location : locations) {
             List<Stock> productsStocks = new ArrayList<>();
-            for (Map.Entry<Integer, Integer> stock : stocks.entrySet()) {
+            for (Map.Entry<Integer, Integer> productQuantity : productQuantityListInput.entrySet()) {
                 Stock newStock = stockService
-                        .getStockByProductId(stock.getKey())
+                        .getStockByProductId(productQuantity.getKey())
                         .stream()
-                        .filter(s -> s.getQuantity() >= stock.getValue()
-                                && s.getProduct().getId().equals(stock.getKey())
+                        .filter(s -> s.getQuantity() >= productQuantity.getValue()
+                                && s.getProduct().getId().equals(productQuantity.getKey())
                                 && s.getLocation().equals(location))
                         .findFirst()
                         .orElse(null);
 
-                if (newStock != null && newStock.getQuantity() > stock.getValue() &&
+                if (newStock != null && newStock.getQuantity() > productQuantity.getValue() &&
                         !productsStocks.contains(newStock)) {
                     productsStocks.add(newStock);
                 }
             }
-            if (productsStocks.size() == stocks.size())
+            if (productsStocks.size() == productQuantityListInput.size())
                 return productsStocks;
         }
 

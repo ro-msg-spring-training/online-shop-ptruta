@@ -37,15 +37,14 @@ public class StockService {
     }
 
     @Transactional
-    public Stock updateStock(Stock stock, Integer quantity) throws StockLocationProductIdNotFoundException {
+    public Stock updateStock(Stock stock, Integer quantity){
         final Stock stockGot = stockRepository.findAll()
                 .stream()
                 .filter(s -> s.getLocation().getId().equals(stock.getLocation().getId())
                         && s.getProduct().getId().equals(stock.getProduct().getId()))
                 .findFirst()
                 .orElseThrow(() -> new StockLocationProductIdNotFoundException("No Stock with location and product id"));
-        System.out.println(stockGot.getLocation().getId() + " "
-                + stockGot.getProduct().getId() + " " + stockGot.getQuantity());
+
         if (stockGot.getQuantity() >= stock.getQuantity()) {
             stockGot.setQuantity(stockGot.getQuantity() - quantity);
             return stockRepository.save(stockGot);
@@ -67,13 +66,17 @@ public class StockService {
         return stockRepository.findStockByLocation(locationId);
     }
 
-    public Stock createStock(Stock stock) throws ProductNoIdFoundException, LocationIdNotFoundException {
+    public Stock createStock(Stock stock) {
         productRepository.findById(stock.getProduct().getId())
                 .orElseThrow(() -> new ProductNoIdFoundException("No product id found" + stock.getProduct().getId()));
         locationRepository.findById(stock.getLocation().getId())
                 .orElseThrow(() -> new LocationIdNotFoundException("No location id found" + stock.getLocation().getId()));
 
         return stockRepository.save(stock);
+    }
+
+    public List<Stock> saveStocks(List<Stock> stocks){
+        return stockRepository.saveAll(stocks);
     }
 }
 

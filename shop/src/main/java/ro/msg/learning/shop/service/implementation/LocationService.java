@@ -18,7 +18,7 @@ public class LocationService {
     private final LocationRepository locationRepository;
 
 
-    public Location getLocation(Integer id) throws LocationIdNotFoundException {
+    public Location getLocation(Integer id) {
         return locationRepository.findById(id)
                 .orElseThrow(() -> new LocationIdNotFoundException("No location with id" + id));
     }
@@ -26,5 +26,9 @@ public class LocationService {
 
     public List<Location> getLocations() {
         return new ArrayList<>(locationRepository.findAll());
+    }
+
+    public Location createLocation(Location location){
+        return locationRepository.save(location);
     }
 }

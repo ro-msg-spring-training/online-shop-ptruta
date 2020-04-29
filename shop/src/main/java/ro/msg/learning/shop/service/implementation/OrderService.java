@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.domain.*;
 import ro.msg.learning.shop.repository.OrderDetailRepository;
 import ro.msg.learning.shop.repository.OrderRepository;
-import ro.msg.learning.shop.service.exceptions.LocationIdNotFoundException;
-import ro.msg.learning.shop.service.exceptions.StockLocationProductIdNotFoundException;
-import ro.msg.learning.shop.service.strategies.ChosenStrategy;
+import ro.msg.learning.shop.service.strategies.configuration.IWhichStrategy;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,7 @@ import java.util.Objects;
 public class OrderService {
 
     private final OrderDetailRepository orderDetailRepository;
-    private final ChosenStrategy strategy;
+    private final IWhichStrategy getStrategy;
     private final StockService stockService;
     private final CustomerService customerService;
     private final OrderRepository orderRepository;
@@ -29,16 +28,15 @@ public class OrderService {
     private String chooseStrategy;
 
     @Transactional
-    public List<Order> createOrder(Map<Integer, Integer> stocks, Order order) throws StockLocationProductIdNotFoundException,
-            LocationIdNotFoundException {
-        List<Stock> stocksList = strategy.getStrategy().getProductLocation(stocks);
+    public List<Order> createOrder(Map<Integer, Integer> stocks, Order order) {
+        List<Stock> stocksList = getStrategy.getProductLocation(stocks);
         List<OrderDetail> orderDetails = new ArrayList<>();
         OrderDetail orderDetail;
         List<Order> orders = new ArrayList<>();
         Order savedOrder = null;
 
-        if (chooseStrategy.equals("Single")){
-            order.setCustomer(customerService.getCustomer(1));
+        if (chooseStrategy.equals("Single")) {
+            order.setCustomer(customerService.getCustomer(order.getCustomer().getId()));
             order.setShippedForm(stocksList.get(0).getLocation());
             savedOrder = orderRepository.save(order);
             orders.add(savedOrder);
@@ -47,8 +45,8 @@ public class OrderService {
         for (Stock stock : stocksList) {
             Stock stockWithUpdatedQuantity = updateStockQuantity(stock, stocks);
 
-            if(chooseStrategy.equals("MostAbundant")) {
-                order.setCustomer(customerService.getCustomer(1));
+            if (chooseStrategy.equals("MostAbundant")) {
+                order.setCustomer(customerService.getCustomer(order.getCustomer().getId()));
                 order.setShippedForm(stock.getLocation());
                 savedOrder = orderRepository.save(order);
                 orders.add(savedOrder);
@@ -74,8 +72,20 @@ public class OrderService {
         return orders;
     }
 
-    private Stock updateStockQuantity(Stock stock, Map<Integer, Integer> stocks)
-            throws StockLocationProductIdNotFoundException {
+    @Transactional
+    public List<Order> getOrders(Map<Integer, Integer> stocks, Order order) {
+        return createOrder(stocks, order);
+    }
+
+    public Order getOrder(Order order) {
+        return orderRepository.findById(order.getId()).orElse(null);
+    }
+
+    public Order getOrderById(Integer id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    private Stock updateStockQuantity(Stock stock, Map<Integer, Integer> stocks) {
         if (stocks.containsKey(stock.getProduct().getId())) {
             Integer quantityForProductWithId = stocks.get(stock.getProduct().getId());
             return stockService.updateStock(stock, quantityForProductWithId);

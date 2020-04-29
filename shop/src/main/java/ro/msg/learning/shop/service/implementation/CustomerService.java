@@ -18,4 +18,8 @@ public class CustomerService {
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("No customer with this id" + customerId));
     }
+
+    public Customer createCustomer(final Customer customer){
+        return customerRepository.save(customer);
+    }
 }

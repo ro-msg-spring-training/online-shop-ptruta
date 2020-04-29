@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.service.strategies;
+package ro.msg.learning.shop.service.strategies.configuration;
 
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.domain.Stock;
@@ -10,5 +10,5 @@ import java.util.Map;
 
 @Service
 public interface IWhichStrategy {
-    List<Stock> getProductLocation(Map<Integer, Integer> stocks) throws StockLocationProductIdNotFoundException, LocationIdNotFoundException;
+    List<Stock> getProductLocation(Map<Integer, Integer> productQuantityListInput);
 }

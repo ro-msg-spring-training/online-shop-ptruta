@@ -14,4 +14,8 @@ public class ProductCategoryService {
     public ProductCategory getProductCategory(final Integer id) {
         return productCategoryRepository.findById(id).orElse(null);
     }
+
+    public ProductCategory createProductCategory(final ProductCategory productCategory){
+        return productCategoryRepository.save(productCategory);
+    }
 }
