@@ -50,6 +50,7 @@ public class UserSecurityConfiguration {
                     .httpBasic()
                     .and()
                     .csrf().disable();
+            http.headers().frameOptions().disable();
         }
     }
 
@@ -70,10 +71,8 @@ public class UserSecurityConfiguration {
                     .invalidateHttpSession(true)
                     .permitAll()
                     .and()
-                    .formLogin()
-                    .permitAll()
-                    .and()
                     .csrf().disable();
+            http.headers().frameOptions().disable();
         }
 
     }
