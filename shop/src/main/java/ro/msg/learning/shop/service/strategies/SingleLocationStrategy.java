@@ -7,7 +7,6 @@ import ro.msg.learning.shop.domain.Stock;
 import ro.msg.learning.shop.service.exceptions.LocationIdNotFoundException;
 import ro.msg.learning.shop.service.implementation.LocationService;
 import ro.msg.learning.shop.service.implementation.StockService;
-import ro.msg.learning.shop.service.strategies.configuration.IWhichStrategy;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

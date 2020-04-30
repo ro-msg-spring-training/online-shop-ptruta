@@ -6,10 +6,9 @@ import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.domain.*;
 import ro.msg.learning.shop.repository.OrderDetailRepository;
 import ro.msg.learning.shop.repository.OrderRepository;
-import ro.msg.learning.shop.service.strategies.configuration.IWhichStrategy;
+import ro.msg.learning.shop.service.strategies.IWhichStrategy;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

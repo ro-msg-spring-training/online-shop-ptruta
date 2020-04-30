@@ -1,5 +1,5 @@
  INSERT INTO "SHOP_SCHEMA"."CUSTOMER" VALUES
-(1, '2', '3', '4', '5');
+(1, '2', '3', '4', 'ptruta','pati');
 INSERT INTO "SHOP_SCHEMA"."LOCATION" VALUES
 (1, '2', '3', '4', '5', '6'),
 (2, '3', '4', '5', '6', '7'),

@@ -1,4 +1,4 @@
-package ro.msg.learning.shop.service.strategies;
+package ro.msg.learning.shop.configuration;
 
 
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ro.msg.learning.shop.service.implementation.LocationService;
 import ro.msg.learning.shop.service.implementation.StockService;
-import ro.msg.learning.shop.service.strategies.configuration.IWhichStrategy;
+import ro.msg.learning.shop.service.strategies.IWhichStrategy;
+import ro.msg.learning.shop.service.strategies.MostAbundantStrategy;
+import ro.msg.learning.shop.service.strategies.SingleLocationStrategy;
 
 @Configuration
 @RequiredArgsConstructor
