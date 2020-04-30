@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.domain;
 
 import lombok.*;
+import org.hibernate.engine.profile.Fetch;
 
 import javax.persistence.*;
 

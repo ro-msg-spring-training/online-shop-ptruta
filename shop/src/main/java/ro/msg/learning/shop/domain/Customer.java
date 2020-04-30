@@ -21,6 +21,8 @@ public class Customer {
 
     private String lastName;
 
+    private String password;
+
     private String userName;
 
     private String emailAddress;

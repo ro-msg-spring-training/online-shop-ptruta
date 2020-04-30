@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -20,6 +21,8 @@ public class OrderDto implements Serializable {
 
     private Integer customerId;
 
+    private LocationDto shippedFrom;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime localDateTime;
@@ -32,5 +35,5 @@ public class OrderDto implements Serializable {
 
     private String streetAddress;
 
-    private Map<Integer, Integer> orderDetails;
+    private List<ProductQuantityDto> orderDetails;
 }

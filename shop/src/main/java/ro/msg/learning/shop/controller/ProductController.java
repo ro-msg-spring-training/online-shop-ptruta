@@ -1,15 +1,11 @@
 package ro.msg.learning.shop.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.var;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.converter.ProductConverter;
 import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.dto.ProductDto;
-import ro.msg.learning.shop.service.exceptions.ProductNoIdFoundException;
-import ro.msg.learning.shop.service.exceptions.SupplierIdNotFoundException;
 import ro.msg.learning.shop.service.implementation.ProductService;
 
 import javax.transaction.Transactional;
@@ -20,8 +16,6 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
     private final ProductConverter productConverter;
-    private final String headerName = "Responded";
-    private final String headerValue = "ProductController";
 
     @GetMapping(path = "/products", produces = "application/json")
     @Transactional
@@ -37,8 +31,7 @@ public class ProductController {
 
     @GetMapping(value = "/products/{id}", produces = "application/json")
     @Transactional
-    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") final Integer id)
-            throws ProductNoIdFoundException {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") final Integer id) {
 
         Product product = productService.getProduct(id);
 
@@ -49,14 +42,13 @@ public class ProductController {
 
     @PostMapping(value = "/products", produces = "application/json")
     @Transactional
-    public ResponseEntity<ProductDto> createProduct(@RequestBody final ProductDto product)
-            throws ProductNoIdFoundException, SupplierIdNotFoundException {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody final ProductDto product) {
 
         Product productConverted = productConverter.convertDtoToModel(product);
 
-        Product productCreated = productService.createProduct(productConverted);
+        productService.createProduct(productConverted);
 
-        ProductDto productDto = productConverter.convertModelToDto(productCreated);
+        ProductDto productDto = productConverter.convertModelToDto(productConverted);
 
         return getResponse(productDto);
     }
@@ -64,14 +56,13 @@ public class ProductController {
     @PutMapping(value = "/products/{id}", produces = "application/json")
     @Transactional
     public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") final Integer id,
-                                                    @RequestBody final ProductDto productDto)
-            throws ProductNoIdFoundException {
+                                                    @RequestBody final ProductDto productDto) {
 
         Product productConverted = productConverter.convertDtoToModel(productDto);
 
-        Product productUpdated = productService.updateProduct(id, productConverted);
+        productService.updateProduct(id, productConverted);
 
-        ProductDto productDt = productConverter.convertModelToDto(productUpdated);
+        ProductDto productDt = productConverter.convertModelToDto(productConverted);
 
         return getResponse(productDt);
 
@@ -79,7 +70,7 @@ public class ProductController {
 
     @DeleteMapping(value = "/products/{id}", produces = "application/json")
     @Transactional
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable("id") final Integer id) throws ProductNoIdFoundException {
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable("id") final Integer id) {
 
         Product productDeleted = productService.deleteProduct(id);
 
@@ -89,16 +80,12 @@ public class ProductController {
     }
 
     public ResponseEntity<ProductDto> getResponse(ProductDto productDto) {
-        var headers = new HttpHeaders();
-        headers.add(headerName, headerValue);
 
-        return ResponseEntity.accepted().headers(headers).body(productDto);
+        return ResponseEntity.accepted().body(productDto);
     }
 
     public ResponseEntity<List<ProductDto>> getResponses(List<ProductDto> productDtos) {
-        var headers = new HttpHeaders();
-        headers.add(headerName, headerValue);
 
-        return ResponseEntity.accepted().headers(headers).body(productDtos);
+        return ResponseEntity.accepted().body(productDtos);
     }
 }

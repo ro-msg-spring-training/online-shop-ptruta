@@ -14,6 +14,7 @@ public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
                 .lastName(dto.getLastName())
                 .userName(dto.getUserName())
                 .emailAddress(dto.getEmailAddress())
+                .password(dto.getPassword())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
                 .lastName(customer.getLastName())
                 .userName(customer.getUserName())
                 .emailAddress(customer.getEmailAddress())
+                .password(customer.getPassword())
                 .build();
 
     }

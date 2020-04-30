@@ -22,12 +22,11 @@ public class ProductService {
     private final SupplierRepository supplierRepository;
 
 
-    public Product createProduct(Product product) throws ProductNoIdFoundException, SupplierIdNotFoundException {
+    public Product createProduct(Product product) {
         productCategoryRepository.findById(product.getProductCategory().getId())
                 .orElseThrow(() -> new ProductNoIdFoundException("No product id found" + product.getProductCategory().getId()));
         supplierRepository.findById(product.getSupplier().getId())
                 .orElseThrow(() -> new SupplierIdNotFoundException("No supplier id found" + product.getSupplier().getId()));
-        product.setId(product.getId());
         return productRepository.save(product);
     }
 
@@ -39,7 +38,7 @@ public class ProductService {
 
 
     @Transactional
-    public Product updateProduct(final Integer id, Product product) throws ProductNoIdFoundException {
+    public Product updateProduct(final Integer id, Product product) {
         Product productFound = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNoIdFoundException("No product found with this id" + id));
         productFound.setProductCategory(product.getProductCategory());
@@ -55,7 +54,7 @@ public class ProductService {
 
 
     @Transactional
-    public Product deleteProduct(final Integer id) throws ProductNoIdFoundException {
+    public Product deleteProduct(final Integer id) {
         Product productFound = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNoIdFoundException("No product found with this id" + id));
         productRepository.deleteById(id);
